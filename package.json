@@ -2,10 +2,10 @@
     "name": "tripaglace-db",
     "version": "1.0.0",
     "description": "",
-    "main": "src/app.js",
+    "main": "src/server.js",
     "scripts": {
-        "start": "node src/app.js",
-        "dev": "nodemon src/app.js",
+        "start": "node src/server.js",
+        "dev": "nodemon src/server.js",
         "lint": "eslint --quiet --cache --fix .",
         "format": "prettier --write ."
     },

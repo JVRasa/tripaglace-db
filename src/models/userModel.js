@@ -11,7 +11,7 @@ async function findMany() {
 async function findOne(id) {
     const [[user]] = await db
         .promise()
-        .query('SELECT * FROM products WHERE id = ?', [id]);
+        .query('SELECT * FROM users WHERE id = ?', [id]);
     return user;
 }
 
@@ -19,7 +19,7 @@ async function create({ username, email, password }) {
     const [{ insertId }] = await db
         .promise()
         .query(
-            'INSERT INTO products (username, email, password) VALUES (?, ?, ?)',
+            'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
             [username, email, password]
         );
 
