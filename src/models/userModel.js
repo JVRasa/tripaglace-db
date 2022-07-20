@@ -2,7 +2,8 @@ const db = require('../db-config');
 const Joi = require('joi');
 
 async function findMany() {
-    let sql = 'SELECT * FROM users';
+    let sql =
+        'SELECT username, email, password, shopname AS favourite_shops FROM users AS us LEFT JOIN favourites AS fa ON fa.user_id=us.id LEFT JOIN parlours AS pa ON pa.id=fa.parlour_id';
 
     const [users] = await db.promise().query(sql);
     return users;
@@ -11,7 +12,10 @@ async function findMany() {
 async function findOne(id) {
     const [[user]] = await db
         .promise()
-        .query('SELECT * FROM users WHERE id = ?', [id]);
+        .query(
+            'SELECT username, email, password, shopname AS favourite_shops FROM users AS us LEFT JOIN favourites AS fa ON fa.user_id=us.id LEFT JOIN parlours AS pa ON pa.id=fa.parlour_id WHERE id = ?',
+            [id]
+        );
     return user;
 }
 
