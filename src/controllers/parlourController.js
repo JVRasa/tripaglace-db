@@ -1,9 +1,9 @@
 const Parlour = require('../models/parlourModel');
 
 async function handleGetParlours(req, res) {
-    const { flavourname } = req.query;
+    const { flavours } = req.query;
     try {
-        res.send(await Parlour.findMany({ flavourname }));
+        res.send(await Parlour.findMany({ flavours }));
     } catch (err) {
         console.error(err);
         res.status(500).send('something wrong happened');
