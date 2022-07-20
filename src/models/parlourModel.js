@@ -2,7 +2,8 @@ const db = require('../db-config');
 const Joi = require('joi');
 
 async function findMany() {
-    let sql = 'SELECT * FROM parlours';
+    let sql =
+        'SELECT shopname, address, zip, city, GROUP_CONCAT(flavourname) FROM parlours AS pa JOIN menu AS me ON me.parlour_id=pa.id JOIN flavours AS fl ON fl.id=me.flavour_id GROUP BY pa.shopname, pa.address, pa.zip, pa.city';
 
     const [parlours] = await db.promise().query(sql);
     return parlours;
@@ -11,7 +12,10 @@ async function findMany() {
 async function findOne(id) {
     const [[parlour]] = await db
         .promise()
-        .query('SELECT * FROM parlours WHERE id = ?', [id]);
+        .query(
+            'SELECT shopname, address, zip, city, GROUP_CONCAT(flavourname) FROM parlours AS pa JOIN menu AS me ON me.parlour_id=pa.id JOIN flavours AS fl ON fl.id=me.flavour_id WHERE pa.id = ?',
+            [id]
+        );
     return parlour;
 }
 
