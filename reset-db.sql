@@ -6,7 +6,7 @@ CREATE TABLE `users` (
  `email` VARCHAR(100) NOT NULL,
   `password` VARCHAR(100) NOT NULL,
  PRIMARY KEY (`id`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `users` (username, email, password)
 VALUES ('admin', 'admin@tripaglace.fr', 'verystrongpassword'), ('toto', 'toto@alaplage.com', 'superpassword'), ('baba', 'baba@orhum.com', 'strongpassword');
@@ -20,7 +20,7 @@ CREATE TABLE `parlours` (
  `zip` VARCHAR(6) NOT NULL,
  `city` VARCHAR(100) NOT NULL,
  PRIMARY KEY (`id`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `parlours` (shopname, address, zip, city)
 VALUES ('Mon petit Glacier', '2 rue Delandine', '69004', 'Lyon'), ('Mon grand Glacier', '17 rue Laroute', '69005', 'Lyon'), ('Mon géant Glacier', '59 rue Artichaud', '69001', 'Lyon');
@@ -32,9 +32,9 @@ CREATE TABLE `favourites` (
  `user_id` INT NOT NULL,
  `parlour_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_Favourites_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  CONSTRAINT `fk_Favourites_parlour` FOREIGN KEY (`parlour_id`) REFERENCES `parlours` (`id`),
-) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+  FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`parlour_id`) REFERENCES `parlours` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `favourites` (user_id, parlour_id)
 VALUES (1, 1);
@@ -45,10 +45,10 @@ CREATE TABLE `flavours` (
  `id` int NOT NULL AUTO_INCREMENT,
  `flavourname` VARCHAR(100) NOT NULL,
  PRIMARY KEY (`id`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `flavours` (flavourname)
-VALUES ('Banane', 'Chocolat', 'Fraise', 'Vanille', 'Citron', 'Pistache', 'Noisette');
+VALUES ('Banane'), ('Chocolat'), ('Fraise'), ('Vanille'), ('Citron'), ('Pistache'), ('Noisette');
 
 DROP TABLE IF EXISTS `menu`;
 
@@ -57,11 +57,11 @@ CREATE TABLE `menu` (
  `parlour_id` INT NULL,
  `flavour_id` INT NULL,
   PRIMARY KEY (`id`),
- CONSTRAINT `fk_Menu_parlour` FOREIGN KEY (`parlour_id`) REFERENCES `parlours` (`id`),
- CONSTRAINT `fk_Menu_flavour` FOREIGN KEY (`flavour_id`) REFERENCES `flavours` (`id`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+  FOREIGN KEY (`parlour_id`) REFERENCES `parlours` (`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`flavour_id`) REFERENCES `flavours` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `menu` (user_id, parlour_id)
+INSERT INTO `menu` (parlour_id, flavour_id)
 VALUES (1, 1), (1, 2), (1, 3), (2, 1), (2, 4), (3, 5), (3, 6);
 
 DROP TABLE IF EXISTS `reviews`;
@@ -72,9 +72,9 @@ CREATE TABLE `reviews` (
  `user_id` INT NOT NULL,
  `parlour_id` INT NOT NULL,
  PRIMARY KEY (`id`),
- CONSTRAINT `fk_Reviews_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
- CONSTRAINT `fk_Reviews_parlour` FOREIGN KEY (`parlour_id`) REFERENCES `parlours` (`id`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+ FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+ FOREIGN KEY (`parlour_id`) REFERENCES `parlours` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `reviews` (message, user_id, parlour_id)
-VALUES (`C'était trop bon!!`, 2, 1), (`J'ai adoré`, 2, 2), (`Miam`, 3, 3);
+VALUES ("C'était trop bon!!", 2, 1), ("J'ai adoré", 2, 2), ("Miam", 3, 3);
