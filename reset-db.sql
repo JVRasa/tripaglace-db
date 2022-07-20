@@ -11,9 +11,9 @@ CREATE TABLE `users` (
 INSERT INTO `users` (username, email, password)
 VALUES ('admin', 'admin@tripaglace.fr', 'verystrongpassword'), ('toto', 'toto@alaplage.com', 'superpassword'), ('baba', 'baba@orhum.com', 'strongpassword');
 
-DROP TABLE IF EXISTS `parlour`;
+DROP TABLE IF EXISTS `parlours`;
 
-CREATE TABLE `parlour` (
+CREATE TABLE `parlours` (
  `id` int NOT NULL AUTO_INCREMENT,
  `shopname` VARCHAR(50) NOT NULL,
  `address` VARCHAR(100) NOT NULL,
@@ -22,20 +22,59 @@ CREATE TABLE `parlour` (
  PRIMARY KEY (`id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
-INSERT INTO `parlour` (shopname, address, zip, city)
+INSERT INTO `parlours` (shopname, address, zip, city)
 VALUES ('Mon petit Glacier', '2 rue Delandine', '69004', 'Lyon'), ('Mon grand Glacier', '17 rue Laroute', '69005', 'Lyon'), ('Mon géant Glacier', '59 rue Artichaud', '69001', 'Lyon');
 
 DROP TABLE IF EXISTS `favourites`;
 
 CREATE TABLE `favourites` (
- `user_id` INT NULL,
- `parlour_id` INT NULL,
- CONSTRAINT `fk_Favourites_user` FOREIGN KEY (`parlour_id`) REFERENCES `parlour` (`id`),
- CONSTRAINT `fk_Favourites_parlour` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+ `id` int NOT NULL AUTO_INCREMENT,
+ `user_id` INT NOT NULL,
+ `parlour_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_Favourites_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `fk_Favourites_parlour` FOREIGN KEY (`parlour_id`) REFERENCES `parlours` (`id`),
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
 INSERT INTO `favourites` (user_id, parlour_id)
-VALUES ('2' ,'1');
+VALUES (1, 1);
 
+DROP TABLE IF EXISTS `flavours`;
 
+CREATE TABLE `flavours` (
+ `id` int NOT NULL AUTO_INCREMENT,
+ `flavourname` VARCHAR(100) NOT NULL,
+ PRIMARY KEY (`id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
+INSERT INTO `flavours` (flavourname)
+VALUES ('Banane', 'Chocolat', 'Fraise', 'Vanille', 'Citron', 'Pistache', 'Noisette');
+
+DROP TABLE IF EXISTS `menu`;
+
+CREATE TABLE `menu` (
+ `id` int NOT NULL AUTO_INCREMENT,
+ `parlour_id` INT NULL,
+ `flavour_id` INT NULL,
+  PRIMARY KEY (`id`),
+ CONSTRAINT `fk_Menu_parlour` FOREIGN KEY (`parlour_id`) REFERENCES `parlours` (`id`),
+ CONSTRAINT `fk_Menu_flavour` FOREIGN KEY (`flavour_id`) REFERENCES `flavours` (`id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+
+INSERT INTO `menu` (user_id, parlour_id)
+VALUES (1, 1), (1, 2), (1, 3), (2, 1), (2, 4), (3, 5), (3, 6);
+
+DROP TABLE IF EXISTS `reviews`;
+
+CREATE TABLE `reviews` (
+ `id` int NOT NULL AUTO_INCREMENT,
+ `message` VARCHAR(200) NOT NULL,
+ `user_id` INT NOT NULL,
+ `parlour_id` INT NOT NULL,
+ PRIMARY KEY (`id`),
+ CONSTRAINT `fk_Reviews_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+ CONSTRAINT `fk_Reviews_parlour` FOREIGN KEY (`parlour_id`) REFERENCES `parlours` (`id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+
+INSERT INTO `reviews` (message, user_id, parlour_id)
+VALUES (`C'était trop bon!!`, 2, 1), (`J'ai adoré`, 2, 2), (`Miam`, 3, 3);
