@@ -1,21 +1,17 @@
-const connection = require('./db-config')
-const express = require('express')
-const app = express()
+const express = require('express');
+const db = require('./db-config');
 
-const port = process.env.DB_PORT || 5000
+const app = express();
 
-connection.connect((err) => {
-    if (err) {
-        console.error('error connecting: ' + err.stack)
-    } else {
-        console.log(
-            'connected to database with threadId :  ' + connection.threadId
-        )
-    }
-})
+const initRoutes = require('./routes/index');
 
-app.use(express.json())
+app.use(express.json());
 
-app.listen(port, () => {
-    console.log(`Server listening on port ${port}`)
-})
+initRoutes(app);
+app.use(express.json());
+
+db.connect((err) => {
+    if (err) console.error('error connecting to db');
+});
+
+module.exports.app = app;
