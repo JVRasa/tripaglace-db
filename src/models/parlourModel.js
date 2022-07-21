@@ -3,7 +3,7 @@ const Joi = require('joi');
 
 async function findMany({ flavours }) {
     let sql =
-        'SELECT shopname, address, zip, city, GROUP_CONCAT(DISTINCT flavourname ORDER BY flavourname) AS flavours FROM parlours AS pa JOIN menu AS me ON me.parlour_id=pa.id JOIN flavours AS fl ON fl.id=me.flavour_id GROUP BY pa.id';
+        'SELECT pa.id, shopname, address, zip, city, GROUP_CONCAT(DISTINCT flavourname ORDER BY flavourname) AS flavours FROM parlours AS pa JOIN menu AS me ON me.parlour_id=pa.id JOIN flavours AS fl ON fl.id=me.flavour_id GROUP BY pa.id';
 
     const valuesToEscape = [];
     if (flavours) {
@@ -19,7 +19,7 @@ async function findOne(id) {
     const [[parlour]] = await db
         .promise()
         .query(
-            'SELECT shopname, address, zip, city, GROUP_CONCAT(DISTINCT flavourname ORDER BY flavourname) AS flavours FROM parlours AS pa JOIN menu AS me ON me.parlour_id=pa.id JOIN flavours AS fl ON fl.id=me.flavour_id WHERE pa.id = ?',
+            'SELECT pa.id, shopname, address, zip, city, GROUP_CONCAT(DISTINCT flavourname ORDER BY flavourname) AS flavours FROM parlours AS pa JOIN menu AS me ON me.parlour_id=pa.id JOIN flavours AS fl ON fl.id=me.flavour_id WHERE pa.id = ?',
             [id]
         );
     return parlour;

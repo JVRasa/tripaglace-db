@@ -10,13 +10,13 @@ async function findMany() {
 }
 
 async function findOne(id) {
-    const [[review]] = await db
+    const [reviews] = await db
         .promise()
         .query(
-            'SELECT message, username, shopname FROM reviews AS re JOIN users AS us ON us.id=re.user_id JOIN parlours AS pl ON pl.id=re.parlour_id WHERE re.id = ?',
+            'SELECT message, username, shopname FROM reviews AS re JOIN users AS us ON us.id=re.user_id JOIN parlours AS pl ON pl.id=re.parlour_id WHERE re.parlour_id = ?',
             [id]
         );
-    return review;
+    return reviews;
 }
 
 async function deleteOne(id) {
