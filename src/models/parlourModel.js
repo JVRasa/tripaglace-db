@@ -25,6 +25,16 @@ async function findOne(id) {
     return parlour;
 }
 
+async function findManyReviews(id) {
+    const [reviews] = await db
+        .promise()
+        .query(
+            'SELECT re.id, message, username, shopname FROM reviews AS re JOIN users AS us ON us.id=re.user_id JOIN parlours AS pl ON pl.id=re.parlour_id WHERE re.parlour_id = ?',
+            [id]
+        );
+    return reviews;
+}
+
 async function create({ shopname, address, zip, city }) {
     const [{ insertId }] = await db
         .promise()
@@ -56,6 +66,7 @@ function validate(data, forUpdate = false) {
 module.exports = {
     findMany,
     findOne,
+    findManyReviews,
     create,
     validate,
 };

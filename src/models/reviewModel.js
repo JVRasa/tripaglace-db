@@ -13,7 +13,7 @@ async function findOne(id) {
     const [reviews] = await db
         .promise()
         .query(
-            'SELECT message, username, shopname FROM reviews AS re JOIN users AS us ON us.id=re.user_id JOIN parlours AS pl ON pl.id=re.parlour_id WHERE re.parlour_id = ?',
+            'SELECT re.id, message, username, shopname FROM reviews AS re JOIN users AS us ON us.id=re.user_id JOIN parlours AS pl ON pl.id=re.parlour_id WHERE re.id = ?',
             [id]
         );
     return reviews;

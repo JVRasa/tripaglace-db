@@ -21,6 +21,17 @@ async function handleGetOneParlour(req, res) {
     }
 }
 
+async function handleGetOneParlourReviews(req, res) {
+    try {
+        const reviews = await Parlour.findManyReviews(req.params.id);
+        if (reviews) res.send(reviews);
+        else res.sendStatus(404);
+    } catch (err) {
+        console.error(err);
+        res.sendStatus(500);
+    }
+}
+
 async function handlePost(req, res) {
     try {
         const { shopname, address, zip, city } = req.body;
@@ -47,4 +58,5 @@ module.exports = {
     handleGetParlours,
     handleGetOneParlour,
     handlePost,
+    handleGetOneParlourReviews,
 };
